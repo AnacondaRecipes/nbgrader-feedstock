@@ -1,15 +1,20 @@
-{% set version = "0.9.1" %}
+{% set name = "nbgrader" %}
+{% set version = "0.9.5" %}
 
 package:
-  name: nbgrader
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/n/nbgrader/nbgrader-{{ version }}.tar.gz
-  sha256: 88e3718fb4e6f75dd0b90afea3c5ad0abf14fd23ead4ce7a5c2be5eb6fa327d2
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 1ea898f3b1cd15ebd1f407591ac94b454244566876f0bc8740f5b1d501dc076a
+  patches:
+    # See https://github.com/jupyter/nbgrader/issues/1948
+    - patches/0001-bump-jupyter-ydoc-dependency.patch
 
 build:
-  skip: true # [py<38 or s390x]
+  # caveat: no jupyterlab for py313 and 4.2.x
+  skip: true # [py<38]
   number: 0
   script:
     - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
@@ -18,11 +23,13 @@ build:
 
 requirements:
   host:
-    - hatch-jupyter-builder >=0.7
-    - hatchling >=1.10.0
     - pip
     - python
+    - hatchling >=1.10.0
+    - hatch-jupyter-builder >=0.7
+    - jupyterlab >=4.3.0,<5
   run:
+    - python
     - alembic >=1.7
     - ipython >=8.10.0
     - ipywidgets >=7.6
@@ -30,23 +37,24 @@ requirements:
     - jsonschema >=3
     - jupyter_client <9
     - jupyter_server >=2
-    - jupyterlab >=4.0.2,<5
+    # Officially jupyterlab>=4.2.0,<5 but to align with ydoc
+    # dependency patch above
+    - jupyterlab >=4.3.0,<5
     - jupyterlab_server
     - nbclient >=0.6.1
     - nbconvert >=6
-    - notebook >=7.0.2,<8
-    - python
+    - notebook >=7.2.0,<8
     - python-dateutil >=2.8
-    - pyyaml >=6.0
     - rapidfuzz >=1.8
     - requests >=2.26
+    - setuptools
     - sqlalchemy >=1.4,<3
+    - pyyaml >=6.0
 
 test:
   requires:
     - pip
-    - m2-grep  # [win]
-    - jupyterlab
+    - msys2-grep  # [win]
   imports:
     - nbgrader
   commands:
@@ -61,7 +69,9 @@ test:
     - grep -iE "nbgrader.server_extensions.{{ ext }}.*OK" server_extensions
     - grep -iE "nbgrader.server_extensions.{{ ext }}.*enabled" server_extensions
     {% endfor %}
-    - grep -iE "nbgrader.*OK.*nbgrader" labextensions
+    # The labextension output format changed in 4.2?
+    #- grep -iE "nbgrader.*OK.*nbgrader" labextensions
+    - grep -iE "nbgrader.*enabled.*OK" labextensions
 
 about:
   home: https://github.com/jupyter/nbgrader
@@ -71,6 +81,12 @@ about:
     - LICENSE
     - nbgrader/labextension/static/third-party-licenses.json
   summary: A system for assigning and grading Jupyter notebooks
+  description: |
+    nbgrader is a tool that facilitates creating and grading
+    assignments in the Jupyter notebook. It allows instructors to
+    easily create notebook-based assignments that include both coding
+    exercises and written free-responses. nbgrader then also provides
+    a streamlined interface for quickly grading completed assignments.
   doc_url: https://nbgrader.readthedocs.io
   dev_url: https://github.com/jupyter/nbgrader
 
