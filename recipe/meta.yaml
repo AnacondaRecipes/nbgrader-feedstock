@@ -22,12 +22,15 @@ build:
     - nbgrader = nbgrader.apps.nbgraderapp:main
 
 requirements:
+  build:
+    - patch     # [not win]
+    - msys2-patch  # [win]
   host:
     - pip
     - python
     - hatchling >=1.10.0
     - hatch-jupyter-builder >=0.7
-    - jupyterlab >=4.3.0,<5
+    - jupyterlab 4.3.4
   run:
     - python
     - alembic >=1.7
@@ -99,3 +102,6 @@ extra:
     - BertR
     - SylvainCorlay
     - bollwyvl
+  skip-lints:
+    - python_build_tool_in_run
+    - patch_must_be_in_build   # the linter knows about m2-patch
