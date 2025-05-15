@@ -30,7 +30,6 @@ requirements:
     - python
     - hatchling >=1.10.0
     - hatch-jupyter-builder >=0.7
-    - jupyterlab 4.3.4
   run:
     - python
     - alembic >=1.7
