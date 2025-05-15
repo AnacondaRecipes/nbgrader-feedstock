@@ -1,0 +1,34 @@
+From de693bd1e2ec5a023e2dad62fb2f010053e43bca Mon Sep 17 00:00:00 2001
+From: Ian Fitchet <ifitchet@anaconda.com>
+Date: Fri, 9 May 2025 14:47:25 +0100
+Subject: [PATCH] bump jupyter/ydoc dependency
+
+---
+ package.json | 2 +-
+ yarn.lock    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff -ruN a/nbgrader/labextension/package.json b/nbgrader/labextension/package.json
+--- a/nbgrader/labextension/package.json	2020-02-02 00:00:00.000000000 +0000
++++ b/nbgrader/labextension/package.json	2025-05-09 13:43:43.450389493 +0100
+@@ -45,7 +45,7 @@
+   "dependencies": {
+     "@jupyter-notebook/application": "^7.2.0",
+     "@jupyter-notebook/tree": "^7.2.0",
+-    "@jupyter/ydoc": "^2.0.0",
++    "@jupyter/ydoc": "^3.0.0",
+     "@jupyterlab/application": "^4.2.0",
+     "@jupyterlab/apputils": "^4.3.0",
+     "@jupyterlab/cells": "^4.2.0",
+diff -ruN a/package.json b/package.json
+--- a/package.json	2020-02-02 00:00:00.000000000 +0000
++++ b/package.json	2025-05-09 13:43:31.959967013 +0100
+@@ -45,7 +45,7 @@
+   "dependencies": {
+     "@jupyter-notebook/application": "^7.2.0",
+     "@jupyter-notebook/tree": "^7.2.0",
+-    "@jupyter/ydoc": "^2.0.0",
++    "@jupyter/ydoc": "^3.0.0",
+     "@jupyterlab/application": "^4.2.0",
+     "@jupyterlab/apputils": "^4.3.0",
+     "@jupyterlab/cells": "^4.2.0",
