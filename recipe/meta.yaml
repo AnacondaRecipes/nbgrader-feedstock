@@ -1,5 +1,5 @@
 {% set name = "nbgrader" %}
-{% set version = "0.9.5" %}
+{% set version = "0.9.6" %}
 
 package:
   name: {{ name }}
@@ -7,14 +7,10 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 1ea898f3b1cd15ebd1f407591ac94b454244566876f0bc8740f5b1d501dc076a
-  patches:
-    # See https://github.com/jupyter/nbgrader/issues/1948
-    - patches/0001-bump-jupyter-ydoc-dependency.patch
+  sha256: d01c3a1033c0ef1535936fc53b8e152b46e1e06c02422dca5ef7d5ae62076d4f
 
 build:
-  # caveat: no jupyterlab for py313 and 4.2.x
-  skip: true # [py<38]
+  skip: true # [py<311]
   number: 0
   script:
     - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
@@ -22,14 +18,12 @@ build:
     - nbgrader = nbgrader.apps.nbgraderapp:main
 
 requirements:
-  build:
-    - patch     # [not win]
-    - msys2-patch  # [win]
   host:
     - pip
     - python
     - hatchling >=1.10.0
     - hatch-jupyter-builder >=0.7
+    - jupyter-builder >=1.2.3
   run:
     - python
     - alembic >=1.7
@@ -39,9 +33,7 @@ requirements:
     - jsonschema >=3
     - jupyter_client <9
     - jupyter_server >=2
-    # Officially jupyterlab>=4.2.0,<5 but to align with ydoc
-    # dependency patch above
-    - jupyterlab >=4.3.0,<5
+    - jupyterlab >=4.2.0,<5
     - jupyterlab_server
     - nbclient >=0.6.1
     - nbconvert >=6
@@ -103,4 +95,3 @@ extra:
     - bollwyvl
   skip-lints:
     - python_build_tool_in_run
-    - patch_must_be_in_build   # the linter knows about m2-patch
